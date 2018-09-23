@@ -19,6 +19,7 @@ export const OnLogin = ({ email, password }) => {
                 });
             })
             .catch(error => {
+                console.log(error)
                 dispatch({ type: 'LOGIN_FAILURE', payload: error });
             });
     }

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import AppNavigator from './navigation';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import firebase from 'firebase';
+import * as firebase from 'firebase';
 import rootReducer from './reducers';
 import dbConfig from './config/db';
 import reduxThunk from 'redux-thunk';
