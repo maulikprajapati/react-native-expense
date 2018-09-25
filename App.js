@@ -8,7 +8,7 @@ import rootReducer from './reducers';
 import dbConfig from './config/db';
 import reduxThunk from 'redux-thunk';
 const store = createStore(rootReducer, {}, applyMiddleware(reduxThunk));
-
+console.ignoredYellowBox = ['Setting a timer'];
 export default class App extends React.Component {
   componentDidMount = () => {
     firebase.initializeApp(dbConfig);

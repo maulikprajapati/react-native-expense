@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Text, View } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
-import _ from 'lodash';
-import * as firebase from 'firebase';
-import config from '../config/db';
+import { Text, View, SectionList, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { UpdateExpenseList } from '../actions/expenseActions';
+import { ListItem, List } from 'react-native-elements';
+
 const list = [
     {
         title: 'Appointments',
@@ -13,46 +14,76 @@ const list = [
         title: 'Trips',
         icon: 'flight-takeoff'
     }];
-export class ExpenseList extends Component {
-
+class ExpenseList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { expenses: [] }
+    }
     componentDidMount() {
-        console.log('In Here', firebase)
-        const { uid } = firebase.auth().currentUser;
-        console.log('id =============> ', uid)
-        return firebase.database().ref(`/daily-expense-management/${uid}/expenses`)
-            .on('value', (snapshot) => {
-                let returnArr = [];
-                snapshot.forEach((childSnapshot) => {
-                    var item = childSnapshot.val();
-                    item.key = childSnapshot.key;
-                    returnArr.push(item);
-                });
-                console.log(_.groupBy(returnArr, 'date'));
-            })
+        this.props.updateExpenseList();
     }
 
-    render() {
+
+
+    _renderItem = ({ item, section }) => {
+        console.log(item);
+        return <List containerStyle={{ marginTop: 0 }}>
+            <ListItem
+                title={item.description}
+                subtitle={item.amount}
+            />
+        </List>
+        // <Text style={{ backgroundColor: '#fff', borderBottomWidth: 1, height: 30 }}>{`${item.description}`}</Text>;
+    }
+
+    _renderSectionHeader = ({ section }) => {
         return (
-            <List containerStyle={{ marginTop: 0 }}>
-                <ListItem
-                    title={'Appointments'}
-                    leftIcon={{ name: 'av-timer' }}
+            <View style={styles.sectionHeader}>
+                <Text style={styles.header}>{section.key}</Text>
+            </View>
+        )
+    }
+
+
+    render() {
+        if (!this.props.expenses) {
+            return (<View><Text>Loading...</Text></View >)
+        }
+        return (
+            <View style={styles.container}>
+                <SectionList
+                    sections={this.props.expenses}
+                    renderItem={this._renderItem}
+                    renderSectionHeader={this._renderSectionHeader}
                 />
-                <ListItem
-                    title={'Trips'}
-                    leftIcon={{ name: 'flight-takeoff' }}
-                />
-                <ListItem
-                    title={'Appointments'}
-                    leftIcon={{ name: 'av-timer' }}
-                />
-                <ListItem
-                    title={'Trips'}
-                    leftIcon={{ name: 'flight-takeoff' }}
-                />
-            </List>
+            </View>
         )
     }
 }
 
-export default ExpenseList;
+const mapStateToProps = state => ({
+    expenses: state.expense.expenses
+});
+
+const mapDispatchToProps = dispatch => ({
+    updateExpenseList: bindActionCreators(UpdateExpenseList, dispatch),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseList);
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingTop: 0,
+        backgroundColor: '#ecf0f1',
+    },
+    sectionHeader: {
+        height: 25,
+        flex: 1,
+        // backgroundColor: '#fff',
+        justifyContent: 'center',
+        paddingLeft: 5
+    },
+    header: {
+        fontSize: 10,
+    }
+});

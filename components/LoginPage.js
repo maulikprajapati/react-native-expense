@@ -8,7 +8,6 @@ import FormInnerSection from './FormInnerSection';
 
 class LoginPage extends Component {
     componentWillReceiveProps = (nextProps) => {
-        console.log('usererrrrrrrrrrrrrr', nextProps.user)
         if (nextProps.user) {
             this.props.navigation.navigate('App');
         }

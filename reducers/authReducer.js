@@ -8,8 +8,6 @@ const initialState = {
 }
 
 export default AuthReducer = (state = initialState, action) => {
-    console.log('IN REDUCER', action.type);
-    
     switch (action.type) {
         case Login:
             return { ...state, isLoading: true };

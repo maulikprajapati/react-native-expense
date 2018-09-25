@@ -1,6 +1,6 @@
 import { createStackNavigator } from 'react-navigation';
 import LoginPage from './components/LoginPage';
-import { ExpenseList } from './components/ExpenseList';
+import ExpenseList from './components/ExpenseList';
 import { Icon } from 'react-native-elements';
 import React from 'react';
 import AddExpense from './components/AddExpenseScreen';
@@ -28,7 +28,7 @@ export default createStackNavigator({
             },
             gesturesEnabled: true
         }),
-        
+
     },
 
     AddExpense: {

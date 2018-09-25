@@ -1,18 +1,24 @@
-import AddExpense from "../components/AddExpenseScreen";
+import { NewExpenseAddClicked } from "../actions/actions";
+
 
 const initialState = {
-    isLoading: false
+    isLoading: false,
+    expenses: []
 }
 
 export default ExpenseReducer = (state = initialState, action) => {
-    console.log('IN REDUCER', action.type);
     switch (action.type) {
-        case AddExpense:
+        case NewExpenseAddClicked:
             return state;
         case 'NEW_EXPENSE':
-            console.log("ADDEDD SUCCESSFULLY");
             return state;
-
+        case 'UPDATE_EXPENSE_LIST':
+            const data = action.payload;
+            const newDate = [];
+            Object.keys(data).forEach((item) => {
+                newDate.push({ key: item, data: data[item] })
+            });
+            return { ...state, expenses: newDate };
         default:
             return state;
     }
