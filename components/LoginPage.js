@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Text, View, ActivityIndicator } from 'react-native';
-import { Button, FormInput, FormValidationMessage } from 'react-native-elements';
+import { FormInput, FormValidationMessage } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { OnLogin, onAuthInputChange } from '../actions/authActions';
 import FormInnerSection from './FormInnerSection';
-
+import { Container, Header, Content, Item, Input, Form, Label, Button, Icon } from 'native-base';
 class LoginPage extends Component {
     componentWillReceiveProps = (nextProps) => {
         if (nextProps.user) {
@@ -16,14 +16,11 @@ class LoginPage extends Component {
         if (this.props.isLoading) {
             return (
                 <View>
-                    <ActivityIndicator size={'small'} />
+                    <ActivityIndicator style={{ alignContent: 'flex-start' }} size="small" color="#00ff00" />
                 </View>
             );
         }
-        return (<Button title="Login"
-            backgroundColor={'#3bd3d4'}
-            onPress={() => { this.props.login({ email: this.props.email, password: this.props.password }); }}>
-        </Button>);
+        return <Text style={{ color: '#fff' }}>Login</Text>;
     }
 
     showError() {
@@ -39,27 +36,53 @@ class LoginPage extends Component {
 
     render() {
         return (
-            <View>
-                <FormInnerSection>
-                    <FormInput placeholder="Email"
-                        value={this.props.email}
-                        inputStyle={styles.inputPadder}
-                        onChangeText={text => this.props.inputChange({ field: 'email', value: text })} />
-                </FormInnerSection>
-                <FormInnerSection>
-                    <FormInput placeholder="Password" secureTextEntry={true}
-                        value={this.props.password}
-                        inputStyle={styles.inputPadder}
-                        onChangeText={text => this.props.inputChange({ field: 'password', value: text })}
-                    />
-                </FormInnerSection>
+            // <View>
+            //     <FormInnerSection>
+            //         <FormInput placeholder="Email"
+            //             value={this.props.email}
+            //             inputStyle={styles.inputPadder}
+            //             onChangeText={text => this.props.inputChange({ field: 'email', value: text })} />
+            //     </FormInnerSection>
+            //     <FormInnerSection>
+            //         <FormInput placeholder="Password" secureTextEntry={true}
+            //             value={this.props.password}
+            //             inputStyle={styles.inputPadder}
+            //             onChangeText={text => this.props.inputChange({ field: 'password', value: text })}
+            //         />
+            //     </FormInnerSection>
 
-                {this.showError()}
+            //     {this.showError()}
 
-                <FormInnerSection>
-                    {this.showButton()}
-                </FormInnerSection>
-            </View>
+            //     <FormInnerSection>
+            //         {this.showButton()}
+            //     </FormInnerSection>
+            // </View>
+
+            <Container>
+                <Content>
+                    <Form>
+                        <Item floatingLabel>
+                            <Label>Username</Label>
+                            <Input
+                                value={this.props.email}
+                                onChangeText={text => this.props.inputChange({ field: 'email', value: text })} />
+                        </Item>
+                        <Item floatingLabel >
+                            <Label>Password</Label>
+                            <Input
+                                secureTextEntry={true}
+                                value={this.props.password}
+                                inputStyle={styles.inputPadder}
+                                onChangeText={text => this.props.inputChange({ field: 'password', value: text })}
+                            />
+                        </Item>
+                    </Form>
+                    <Button style={{ marginTop: 30, width: '90%', left: '10%' }} block primary
+                        onPress={() => { this.props.login({ email: this.props.email, password: this.props.password }); }}>
+                        {this.showButton()}
+                    </Button>
+                </Content>
+            </Container>
         )
     }
 }
