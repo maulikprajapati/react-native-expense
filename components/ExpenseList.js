@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Text, View, SectionList, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { UpdateExpenseList } from '../actions/expenseActions';
-import { ListItem, List } from 'react-native-elements';
+import { FlatList, StyleSheet, View } from "react-native";
+import { Text, ListItem, Left, Body, Icon, Right, Title } from "native-base";
 
 const list = [
     {
@@ -17,52 +17,61 @@ const list = [
 class ExpenseList extends Component {
     constructor(props) {
         super(props);
-        this.state = { expenses: [] }
     }
     componentDidMount() {
         this.props.updateExpenseList();
     }
 
 
-
-    _renderItem = ({ item, section }) => {
-        console.log(item);
-        return <List containerStyle={{ marginTop: 0 }}>
-            <ListItem
-                title={item.description}
-                subtitle={item.amount}
-            />
-        </List>
-        // <Text style={{ backgroundColor: '#fff', borderBottomWidth: 1, height: 30 }}>{`${item.description}`}</Text>;
-    }
-
-    _renderSectionHeader = ({ section }) => {
-        return (
-            <View style={styles.sectionHeader}>
-                <Text style={styles.header}>{section.key}</Text>
-            </View>
-        )
-    }
-
-
-    render() {
-        if (!this.props.expenses) {
-            return (<View><Text>Loading...</Text></View >)
+    renderItem = ({ item }) => {
+        if (item.header) {
+            return (
+                <View>
+                    <ListItem itemDivider>
+                        <Body>
+                            <Text style={{ fontWeight: "bold" }}>
+                                {item.date}
+                            </Text>
+                        </Body>
+                    </ListItem>
+                    <ListItem style={{ marginLeft: 0, backgroundColor: '#fff' }}>
+                        <Body>
+                            <Text>{item.description}</Text>
+                        </Body>
+                        <Right>
+                            <Text>{item.amount}</Text>
+                        </Right>
+                    </ListItem>
+                </View>
+            );
+        } else if (!item.header) {
+            return (
+                <ListItem style={{ marginLeft: 0, backgroundColor: '#fff' }}>
+                    <Body>
+                        <Text>{item.description}</Text>
+                    </Body>
+                    <Right>
+                        <Text>{item.amount}</Text>
+                    </Right>
+                </ListItem>
+            );
         }
+    };
+    render() {
         return (
-            <View style={styles.container}>
-                <SectionList
-                    sections={this.props.expenses}
-                    renderItem={this._renderItem}
-                    renderSectionHeader={this._renderSectionHeader}
-                />
-            </View>
-        )
+            <FlatList
+                data={this.props.expenses}
+                renderItem={this.renderItem}
+                keyExtractor={item => item.key}
+                stickyHeaderIndices={this.props.stickyHeaderIndices}
+            />
+        );
     }
 }
 
 const mapStateToProps = state => ({
-    expenses: state.expense.expenses
+    expenses: state.expense.expenses,
+    stickyHeaderIndices: state.expense.stickyHeaderIndices
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -3,7 +3,8 @@ import { NewExpenseAddClicked } from "../actions/actions";
 
 const initialState = {
     isLoading: false,
-    expenses: []
+    stickyHeaderIndices: [],
+    expenses: [],
 }
 
 export default ExpenseReducer = (state = initialState, action) => {
@@ -15,10 +16,26 @@ export default ExpenseReducer = (state = initialState, action) => {
         case 'UPDATE_EXPENSE_LIST':
             const data = action.payload;
             const newDate = [];
-            Object.keys(data).forEach((item) => {
-                newDate.push({ key: item, data: data[item] })
+            let arr = [];
+            let arrDates = [];
+            data.map((item, index) => {
+                debugger
+                if (index === 0) {
+                    item.header = true;
+                    arrDates.push(item.date);
+                    arr.push(index);
+                } else {
+                    if (arrDates.indexOf(item.date) > -1) {
+                        item.header = false;
+                    } else {
+                        item.header = true;
+                        arrDates.push(item.date);
+                        arr.push(index);
+                    }
+                }
             });
-            return { ...state, expenses: newDate };
+            arr.push(0);
+            return { ...state, expenses: data, stickyHeaderIndices: arr };
         default:
             return state;
     }

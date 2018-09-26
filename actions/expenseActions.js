@@ -1,6 +1,7 @@
 import { NewExpenseAddClicked } from "./actions";
 import firebase from 'firebase';
 import * as _ from 'lodash';
+import { convertStringToDate } from "../helper/common";
 export const AddNewExpense = ({ date, amount, description }) => {
     const { uid } = firebase.auth().currentUser;
     return (dispatch) => {
@@ -21,9 +22,10 @@ export const UpdateExpenseList = () => {
                     item.key = childSnapshot.key;
                     returnArr.push(item);
                 });
+
                 dispatch({
                     type: "UPDATE_EXPENSE_LIST",
-                    payload: _.groupBy(returnArr, 'date')
+                    payload: _.orderBy(returnArr, (value) => (convertStringToDate(value.date)))
                 });
             });
     }
