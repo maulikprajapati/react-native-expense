@@ -3,12 +3,20 @@ import { Text, View, ActivityIndicator } from 'react-native';
 import { FormInput, FormValidationMessage } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { OnLogin, onAuthInputChange } from '../actions/authActions';
+import { OnLogin, onAuthInputChange, getAuthToken } from '../actions/authActions';
 import FormInnerSection from './FormInnerSection';
 import { Container, Header, Content, Item, Input, Form, Label, Button, Icon } from 'native-base';
 class LoginPage extends Component {
+    constructor() {
+        super();
+    }
+
+    componentWillMount = () => {
+        this.props.getAuthToken();
+    }
+
     componentWillReceiveProps = (nextProps) => {
-        if (nextProps.user) {
+        if (nextProps.authToken) {
             this.props.navigation.navigate('App');
         }
     }
@@ -91,13 +99,14 @@ const mapStateToProps = state => ({
     email: state.auth.email,
     password: state.auth.password,
     isLoading: state.auth.isLoading,
-    user: state.auth.user,
+    authToken: state.auth.authToken,
     error: state.auth.error
 });
 
 const mapDispatchToProps = dispatch => ({
     login: bindActionCreators(OnLogin, dispatch),
-    inputChange: bindActionCreators(onAuthInputChange, dispatch)
+    inputChange: bindActionCreators(onAuthInputChange, dispatch),
+    getAuthToken: bindActionCreators(getAuthToken, dispatch),
 });
 
 const styles = {

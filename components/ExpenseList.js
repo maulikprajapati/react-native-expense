@@ -4,16 +4,6 @@ import { bindActionCreators } from 'redux';
 import { UpdateExpenseList } from '../actions/expenseActions';
 import { FlatList, StyleSheet, View } from "react-native";
 import { Text, ListItem, Left, Body, Icon, Right, Title } from "native-base";
-
-const list = [
-    {
-        title: 'Appointments',
-        icon: 'av-timer'
-    },
-    {
-        title: 'Trips',
-        icon: 'flight-takeoff'
-    }];
 class ExpenseList extends Component {
     constructor(props) {
         super(props);

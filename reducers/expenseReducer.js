@@ -14,12 +14,11 @@ export default ExpenseReducer = (state = initialState, action) => {
         case 'NEW_EXPENSE':
             return state;
         case 'UPDATE_EXPENSE_LIST':
+        console.log("HERRRRRRRRRRRRRRRRRR")
             const data = action.payload;
-            const newDate = [];
             let arr = [];
             let arrDates = [];
             data.map((item, index) => {
-                debugger
                 if (index === 0) {
                     item.header = true;
                     arrDates.push(item.date);

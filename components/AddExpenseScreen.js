@@ -7,8 +7,7 @@ import { checkNumericOnlyType, getFormattedDate, convertStringToDate } from '../
 import { connect } from 'react-redux';
 import { AddNewExpense } from '../actions/expenseActions';
 import { bindActionCreators } from 'redux';
-import firebase from 'firebase';
-export default class AddExpense extends Component {
+class AddExpense extends Component {
     constructor(props) {
         super(props);
         const date = new Date();
@@ -58,11 +57,11 @@ export default class AddExpense extends Component {
 
     AddNewExpense() {
         const { date, amount, description } = this.state;
-        // this.props.AddNewExpense({ date, amount, description });
-        const { uid } = firebase.auth().currentUser;
-       return firebase.database().ref(`/daily-expense-management/${uid}/expenses`)
-            .push({ date, amount, description })
-            .then(() => console.log('added'));
+        this.props.AddNewExpense({ date, amount, description });
+        //     const { uid } = firebase.auth().currentUser;
+        //    return firebase.database().ref(`/daily-expense-management/${uid}/expenses`)
+        //         .push({ date, amount, description })
+        //         .then(() => console.log('added'));
     }
     render() {
         return (
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
     }
 });
 
-// const mapDispatchToProps = dispatch => ({
-//     AddNewExpense: bindActionCreators(AddNewExpense, dispatch)
-// });
-// export default connect(null, mapDispatchToProps)(AddNewExpense);
+const mapDispatchToProps = dispatch => ({
+    AddNewExpense: bindActionCreators(AddNewExpense, dispatch)
+});
+export default connect(null, mapDispatchToProps)(AddExpense);
